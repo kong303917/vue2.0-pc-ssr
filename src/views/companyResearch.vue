@@ -81,38 +81,45 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+
   export default {
     data() {
       return {
         loading: false,
         reportId:this.$route.params.id || null,
-        reportContent:{},
-        reportExpert:{}
+        //reportContent:{},
+        //reportExpert:{}
       }
     },
-
+    computed: {
+        ...mapState({
+          reportContent: state => state.report.reportContent,
+          reportExpert: state => state.report.reportExpert
+        })
+    },
     components: {
 
     }
     ,created() {
-        this.Api.detailedResearchReport().then((res) =>{
-            if(res.data.statusCode == 200){
+        // this.Api.detailedResearchReport().then((res) =>{
+        //     if(res.data.statusCode == 200){
 
-                this.reportContent =res.data.rows;
-                this.Api.getExpertDetail().then((res) =>{
-                    if(res.data.statusCode == 200){
+        //         this.reportContent =res.data.rows;
+        //         this.Api.getExpertDetail().then((res) =>{
+        //             if(res.data.statusCode == 200){
 
-                        this.reportExpert =res.data.rows;
-                    }
-                }).catch((err) =>{
+        //                 this.reportExpert =res.data.rows;
+        //             }
+        //         }).catch((err) =>{
 
-                });
-            }
-        }).catch((err) =>{
+        //         });
+        //     }
+        // }).catch((err) =>{
 
-        })
-
-
+        // })
+        this.$store.dispatch('detailedResearchReport')
+        this.$store.dispatch('getExpertReport')
     },
     methods: {
         // detailedResearchReport(){

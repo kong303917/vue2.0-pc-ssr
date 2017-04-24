@@ -78,5 +78,13 @@ export default {
 
     getArtleftbar(artId) {
         return fetch('/mock/artLeftList.json')
-    }
+    },
+
+    getUserInfo() {
+        return fetch('/mock/userInfo.json')
+    },
+
+    detailedResearchReport () {
+        return fetch('/mock/detailedResearchReport.json')
+    },
 }
