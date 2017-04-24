@@ -158,10 +158,10 @@ export default {
   },
   computed: {
     ...mapState({
-      userIsLogin: state => state.User.isLogin
-      , userInfo: state => state.User.userInfo
-      , loginToUrl: state => state.User.loginToUrl
-      , curPageUrl: state => state.Site.curPageUrl
+      isLogin: state => state.user.isLogin
+      , userInfo: state => state.user.userInfo
+      //, loginToUrl: state => state.User.loginToUrl
+      //, curPageUrl: state => state.Site.curPageUrl
     }),
     // 发布需求表单数据
     demandForm() {

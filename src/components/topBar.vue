@@ -4,7 +4,7 @@
             <div class="layout-wrap">
                 <div class="user-nav">
                     <p class="reg-login"
-                       v-if="!userIsLogin">
+                       v-if="!isLogin">
                         <a :href="CENTER_ADDRESS+'/user/toRegister'" target="_blank">用户注册 / Free Registration</a>
                         <a href="javascript:;"
                            @click="loginDialogShow = true">登录 / Sign in</a>
@@ -117,7 +117,7 @@ export default {
         }
         return {
             loginDialogShow: false,
-            userIsLogin: false
+            isLogin: false
             //, homeUrl: window.location.origin
             , CENTER_ADDRESS: address.CENTER_ADDRESS
             , USERCENTER_ADDRESS: address.USERCENTER_ADDRESS
@@ -169,40 +169,44 @@ export default {
         setUserIsLoginCookie() {
             this.Cookie.setCookie('userIsLogin', false)
         },
-        ...mapMutations([
-            'changeLoginState'
-            , 'updateUserInfo'
-        ])
+        // ...mapMutations([
+        //     'changeLoginState'
+        //     , 'updateUserInfo'
+        // ])
     },
     computed: {
-        // ...mapState({
-        //     userIsLogin: state => state.User.isLogin
-        //     , userInfo: state => state.User.userInfo
-        //     , loginToUrl: state => state.User.loginToUrl
-        //     , curPageUrl: state => state.Site.curPageUrl
-        // })
+        ...mapState({
+            isLogin: state => state.User.isLogin
+            , userInfo: state => state.User.userInfo
+            //, loginToUrl: state => state.User.loginToUrl
+            //, curPageUrl: state => state.Site.curPageUrl
+        })
     }
     , created() {
         let _app = this.$parent
         // 检测到未登录时处理
         _app.$on('userNotLogin', () => {
             this.Cookie.setCookie('userIsLogin', false)
-            this.changeLoginState({ loginState: false })
-            this.updateUserInfo({
-                userInfo: {}
-            })
+            // this.changeLoginState({ loginState: false })
+            // this.updateUserInfo({
+            //     userInfo: {}
+            // })
+            this.$store.dispatch('changeLoginStatus', { loginState: false })
+            this.$store.dispatch('updateUserInfo', { userInfo: {} })
         })
 
         // 检测到已登录里处理
         _app.$on('userLogined', () => {
-            this.Cookie.setCookie('userIsLogin', true)
-            this.changeLoginState({ loginState: true })
-            this.Api.getUserInfo().then((data) => {
-                // 更新用户信息
-                this.updateUserInfo({
-                    userInfo: data.data.rows
-                })
-            })
+            // this.Cookie.setCookie('userIsLogin', true)
+            // this.changeLoginState({ loginState: true })
+            // this.Api.getUserInfo().then((data) => {
+            //     // 更新用户信息
+            //     this.updateUserInfo({
+            //         userInfo: data.data.rows
+            //     })
+            // })
+            this.$store.dispatch('changeLoginStatus', { loginState: true })
+            this.$store.dispatch('getUserInfo')
         })
 
         this.$root.$on('showLoginDialog', () => {
